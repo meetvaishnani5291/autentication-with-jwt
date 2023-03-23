@@ -1,18 +1,24 @@
-const { ValidationError, AutenticationError } = require("../utils/error");
+const {
+  ValidationError,
+  AutenticationError,
+  DBError,
+} = require("../utils/error");
 
 module.exports = (error, req, res, next) => {
   if (error instanceof AutenticationError) {
-    res.render("login", {
-      message: error.message,
-      isLoggedin: false,
-    });
+    res.locals.message = error.message;
+    res.locals.isLoggedin = false;
+    res.status(401).redirect("/login");
   } else if (error instanceof ValidationError) {
-    res.render("register", {
-      message: error.message,
-      isLoggedin: false,
-    });
+    res.locals.message = error.message;
+    res.locals.isLoggedin = false;
+    res.status(403).redirect("/register");
+  } else if (error instanceof DBError) {
+    res.locals.message = error.message;
+    res.locals.isLoggedin = false;
+    res.status(403).redirect("/login");
   } else {
     console.log(error);
-    res.send("hiiiii");
+    res.status(503).send("Server error");
   }
 };

@@ -1,4 +1,6 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+
 const {
   ValidationError,
   AutenticationError,
@@ -46,11 +48,11 @@ exports.postLogin = async (req, res, next) => {
       email: req.body.email,
       password: req.body.password,
     };
-    const { refreshToken, accessToken } = await User.login(user);
+    const { name, refreshToken, accessToken } = await User.login(user);
     res.cookie("access-token", accessToken);
     res.cookie("refresh-token", refreshToken);
 
-    res.render("login", { message, isLoggedin: false });
+    res.render("index", { message: undefined, isLoggedin: true, name });
   } catch (error) {
     next(error);
   }
@@ -70,7 +72,8 @@ exports.getHomepage = (req, res, next) => {
 };
 exports.getNewToken = (req, res, next) => {
   try {
-    const refreshToken = req.cookies["refresh_token"];
+    const refreshToken = req.cookies["refresh-token"];
+    console.log("===================");
     const userEmail = jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET
@@ -81,9 +84,10 @@ exports.getNewToken = (req, res, next) => {
       { name: user.name, email: user.email },
       process.env.ACCESS_TOKEN_SECRET
     );
-    req.cookie("access-token", newAccessToken);
+    res.cookie("access-token", newAccessToken);
     res.redirect("/");
   } catch (error) {
+    console.log(error);
     next(new AutenticationError("Unauthorised access"));
   }
 };

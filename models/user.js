@@ -51,11 +51,10 @@ exports.login = async (newUser) => {
   if (!validPass) {
     throw new AutenticationError("Invalid Password");
   }
-  console.log(process.env.ACCESS_TOKEN_SECRET);
   const accessToken = jwt.sign(
     {
-      name: newUser.name,
-      email: newUser.email,
+      name: user.name,
+      email: user.email,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -64,12 +63,12 @@ exports.login = async (newUser) => {
   );
   const refreshToken = jwt.sign(
     {
-      name: newUser.name,
+      name: user.name,
     },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "1d" }
   );
-  return { accessToken, refreshToken };
+  return { name: user.name, accessToken, refreshToken };
 };
 exports.fetchUser = async (loggedUser) => {
   const users = await getUsersFromFile();

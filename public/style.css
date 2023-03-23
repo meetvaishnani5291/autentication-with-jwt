@@ -1,0 +1,33 @@
+input,
+textarea {
+  width: 200px;
+}
+form {
+  margin: 20px 400px;
+  min-height: 43vh;
+}
+.form-label {
+  font-size: 20px;
+  font-weight: 500;
+}
+body {
+  background-color: rgb(235, 235, 235);
+  min-height: 43vh;
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.card {
+  cursor: pointer;
+  margin-left: 20px;
+  margin-top: 20px;
+  width: 300px;
+}
+img {
+  height: 200px;
+}
+footer {
+  margin-top: 50px;
+}

@@ -5,9 +5,11 @@ const {
 } = require("../utils/error");
 
 module.exports = (error, req, res, next) => {
+  console.log(error);
   if (error instanceof AutenticationError) {
-    res.locals.message = error.message;
-    res.locals.isLoggedin = false;
+    res.cookie("message", error.message);
+    res.cookie(error.message);
+    console.log("=======before-redirect==========", res.locals);
     res.status(401).redirect("/login");
   } else if (error instanceof ValidationError) {
     res.locals.message = error.message;

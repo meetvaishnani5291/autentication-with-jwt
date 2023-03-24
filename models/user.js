@@ -63,7 +63,7 @@ exports.login = async (newUser) => {
   );
   const refreshToken = jwt.sign(
     {
-      name: user.name,
+      email: user.email,
     },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "1d" }
